@@ -6,6 +6,7 @@ const AdvancedSettings = () => {
   const includeTimestampInUserMessage = settingsStore(
     (s) => s.includeTimestampInUserMessage
   )
+  const timestampTimeZone = settingsStore((s) => s.timestampTimeZone)
   const useVideoAsBackground = settingsStore((s) => s.useVideoAsBackground)
   const showQuickMenu = settingsStore((s) => s.showQuickMenu)
 
@@ -73,6 +74,22 @@ const AdvancedSettings = () => {
             {includeTimestampInUserMessage ? t('StatusOn') : t('StatusOff')}
           </TextButton>
         </div>
+      </div>
+      <div className="my-6">
+        <div className="my-4 text-xl font-bold">{t('TimestampTimeZone')}</div>
+        <div className="my-4 whitespace-pre-line">
+          {t('TimestampTimeZoneInfo')}
+        </div>
+        <input
+          className="w-full rounded border border-white/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-white"
+          value={timestampTimeZone}
+          onChange={(event) =>
+            settingsStore.setState({
+              timestampTimeZone: event.target.value,
+            })
+          }
+          placeholder={t('TimestampTimeZonePlaceholder')}
+        />
       </div>
     </div>
   )
