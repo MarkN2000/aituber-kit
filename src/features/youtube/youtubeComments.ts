@@ -292,8 +292,36 @@ export const mapOneCommePayloadToComments = (
 
     const commentId =
       typeof rawComment.id === 'string' ? rawComment.id : undefined
-    if (commentId && processedIds?.has(commentId)) {
-      continue
+
+    const rawMeta = isRecord(rawComment.meta) ? rawComment.meta : undefined
+    const metaNoRaw = rawMeta?.no
+    let metaNo: number | undefined
+    if (typeof metaNoRaw === 'number') {
+      metaNo = metaNoRaw
+    } else if (typeof metaNoRaw === 'string') {
+      const parsed = Number(metaNoRaw)
+      if (Number.isFinite(parsed)) {
+        metaNo = parsed
+      }
+    }
+
+    const dedupeKey =
+      commentId && metaNo !== undefined
+        ? `${commentId}:${metaNo}`
+        : commentId ?? (metaNo !== undefined ? `metaNo:${metaNo}` : undefined)
+
+    if (processedIds) {
+      if (dedupeKey && processedIds.has(dedupeKey)) {
+        continue
+      }
+
+      if (!dedupeKey && commentId && processedIds.has(commentId)) {
+        continue
+      }
+
+      if (dedupeKey && commentId && processedIds.has(commentId)) {
+        processedIds.delete(commentId)
+      }
     }
 
     const rawData = isRecord(rawComment.data) ? rawComment.data : {}
@@ -324,8 +352,12 @@ export const mapOneCommePayloadToComments = (
       userComment,
     })
 
-    if (commentId && processedIds) {
-      processedIds.add(commentId)
+    if (processedIds) {
+      if (dedupeKey) {
+        processedIds.add(dedupeKey)
+      } else if (commentId) {
+        processedIds.add(commentId)
+      }
     }
   }
 
