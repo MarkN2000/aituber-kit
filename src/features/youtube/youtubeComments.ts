@@ -256,6 +256,11 @@ type ProcessedIdsOption = {
   processedIds?: Set<string>
 }
 
+const stripHtmlTags = (value: string): string =>
+  value.replace(/<[^>]*>/g, '').trim()
+
+const normalizeService = (service: string): string => service.toLowerCase()
+
 export const mapOneCommePayloadToComments = (
   payload: unknown,
   options: ProcessedIdsOption = {}
@@ -286,52 +291,31 @@ export const mapOneCommePayloadToComments = (
     }
 
     const service = typeof rawComment.service === 'string' ? rawComment.service : ''
-    if (service && service !== 'youtube') {
+    if (service && !normalizeService(service).includes('youtube')) {
       continue
     }
 
-    const commentId =
-      typeof rawComment.id === 'string' ? rawComment.id : undefined
-
     const rawMeta = isRecord(rawComment.meta) ? rawComment.meta : undefined
-    const metaNoRaw = rawMeta?.no
-    let metaNo: number | undefined
-    if (typeof metaNoRaw === 'number') {
-      metaNo = metaNoRaw
-    } else if (typeof metaNoRaw === 'string') {
-      const parsed = Number(metaNoRaw)
-      if (Number.isFinite(parsed)) {
-        metaNo = parsed
-      }
-    }
-
-    const dedupeKey =
-      commentId && metaNo !== undefined
-        ? `${commentId}:${metaNo}`
-        : commentId ?? (metaNo !== undefined ? `metaNo:${metaNo}` : undefined)
-
-    if (processedIds) {
-      if (dedupeKey && processedIds.has(dedupeKey)) {
-        continue
-      }
-
-      if (!dedupeKey && commentId && processedIds.has(commentId)) {
-        continue
-      }
-
-      if (dedupeKey && commentId && processedIds.has(commentId)) {
-        processedIds.delete(commentId)
-      }
-    }
-
     const rawData = isRecord(rawComment.data) ? rawComment.data : {}
 
-    const userComment = pickFirstString(
-      rawData.comment,
-      rawData.speechText,
-      rawData.text,
-      rawComment.comment
+    const rawHtml = pickFirstString(
+      rawData.html,
+      rawComment.html
     )
+
+    const commentCandidates = [
+      rawData.comment,
+      rawData.body,
+      rawData.message,
+      rawData.text,
+      rawData.speechText,
+      rawComment.comment,
+      rawComment.body,
+      rawComment.message,
+      rawHtml ? stripHtmlTags(rawHtml) : undefined,
+    ]
+
+    const userComment = pickFirstString(...commentCandidates)
 
     if (!userComment || userComment.startsWith('#')) {
       continue
@@ -340,11 +324,39 @@ export const mapOneCommePayloadToComments = (
     const userName = pickFirstString(
       rawData.displayName,
       rawData.name,
-      rawComment.name
+      rawComment.name,
+      rawComment.userName,
+      rawData.ownerName
     )
 
     const userIconUrl =
       typeof rawData.profileImage === 'string' ? rawData.profileImage : ''
+
+    const commentId =
+      typeof rawComment.id === 'string' ? rawComment.id.trim() : ''
+    const dataId = typeof rawData.id === 'string' ? rawData.id.trim() : ''
+    const metaNoRaw = rawMeta?.no
+    let metaNo: string | undefined
+    if (typeof metaNoRaw === 'number') {
+      metaNo = metaNoRaw.toString()
+    } else if (typeof metaNoRaw === 'string' && metaNoRaw.trim() !== '') {
+      metaNo = metaNoRaw.trim()
+    }
+
+    const dedupeKey = pickFirstString(
+      commentId,
+      dataId,
+      metaNo ? `metaNo:${metaNo}` : ''
+    )
+
+    const fallbackKey = `${userName || 'YouTubeUser'}:${userComment}`
+
+    if (processedIds) {
+      const keyToCheck = dedupeKey || fallbackKey
+      if (processedIds.has(keyToCheck)) {
+        continue
+      }
+    }
 
     mappedComments.push({
       userName: userName || 'YouTubeUser',
@@ -353,11 +365,7 @@ export const mapOneCommePayloadToComments = (
     })
 
     if (processedIds) {
-      if (dedupeKey) {
-        processedIds.add(dedupeKey)
-      } else if (commentId) {
-        processedIds.add(commentId)
-      }
+      processedIds.add(dedupeKey || fallbackKey)
     }
   }
 
