@@ -179,6 +179,7 @@ interface General {
   selectLanguage: Language
   changeEnglishToJapanese: boolean
   includeTimestampInUserMessage: boolean
+  timestampTimeZone: string
   showControlPanel: boolean
   showQuickMenu: boolean
   externalLinkageMode: boolean
@@ -415,6 +416,8 @@ const getInitialValuesFromEnv = (): SettingsState => ({
     process.env.NEXT_PUBLIC_CHANGE_ENGLISH_TO_JAPANESE === 'true',
   includeTimestampInUserMessage:
     process.env.NEXT_PUBLIC_INCLUDE_TIMESTAMP_IN_USER_MESSAGE === 'true',
+  timestampTimeZone:
+    process.env.NEXT_PUBLIC_TIMESTAMP_TIMEZONE || 'UTC',
   showControlPanel: process.env.NEXT_PUBLIC_SHOW_CONTROL_PANEL !== 'false',
   showQuickMenu: process.env.NEXT_PUBLIC_SHOW_QUICK_MENU === 'true',
   externalLinkageMode: process.env.NEXT_PUBLIC_EXTERNAL_LINKAGE_MODE === 'true',
@@ -644,6 +647,7 @@ const settingsStore = create<SettingsState>()(
       selectLanguage: state.selectLanguage,
       changeEnglishToJapanese: state.changeEnglishToJapanese,
       includeTimestampInUserMessage: state.includeTimestampInUserMessage,
+      timestampTimeZone: state.timestampTimeZone,
       externalLinkageMode: state.externalLinkageMode,
       realtimeAPIMode: state.realtimeAPIMode,
       realtimeAPIModeContentType: state.realtimeAPIModeContentType,
