@@ -12,6 +12,8 @@ const YouTube = () => {
   const youtubeApiKey = settingsStore((s) => s.youtubeApiKey)
   const youtubeMode = settingsStore((s) => s.youtubeMode)
   const youtubeLiveId = settingsStore((s) => s.youtubeLiveId)
+  const youtubeCommentSource = settingsStore((s) => s.youtubeCommentSource)
+  const youtubeWebSocketUrl = settingsStore((s) => s.youtubeWebSocketUrl)
   const externalLinkageMode = settingsStore((s) => s.externalLinkageMode)
   const selectAIService = settingsStore((s) => s.selectAIService)
   const selectAIModel = settingsStore((s) => s.selectAIModel)
@@ -70,33 +72,79 @@ const YouTube = () => {
               <>
                 <div className="">{t('YoutubeInfo')}</div>
                 <div className="my-4 text-xl font-bold">
-                  {t('YoutubeAPIKey')}
+                  {t('YoutubeCommentSource')}
                 </div>
-                <input
-                  className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
-                  type="text"
-                  placeholder="..."
-                  value={youtubeApiKey}
+                <select
+                  className="px-4 py-2 bg-white hover:bg-white-hover rounded-lg"
+                  value={youtubeCommentSource}
                   onChange={(e) =>
                     settingsStore.setState({
-                      youtubeApiKey: e.target.value,
+                      youtubeCommentSource: e.target.value as
+                        | 'api'
+                        | 'websocket',
                     })
                   }
-                />
+                >
+                  <option value="api">{t('YoutubeCommentSourceApi')}</option>
+                  <option value="websocket">
+                    {t('YoutubeCommentSourceWebsocket')}
+                  </option>
+                </select>
                 <div className="my-4 text-xl font-bold">
-                  {t('YoutubeLiveID')}
+                  {t('YoutubeLiveCommentSettings')}
                 </div>
-                <input
-                  className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
-                  type="text"
-                  placeholder="..."
-                  value={youtubeLiveId}
-                  onChange={(e) =>
-                    settingsStore.setState({
-                      youtubeLiveId: e.target.value,
-                    })
-                  }
-                />
+                {youtubeCommentSource === 'api' ? (
+                  <>
+                    <div className="my-4 text-xl font-bold">
+                      {t('YoutubeAPIKey')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="..."
+                      value={youtubeApiKey}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          youtubeApiKey: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="my-4 text-xl font-bold">
+                      {t('YoutubeLiveID')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="..."
+                      value={youtubeLiveId}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          youtubeLiveId: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="my-4 text-xl font-bold">
+                      {t('YoutubeWebSocketUrl')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="ws://localhost:11180/sub"
+                      value={youtubeWebSocketUrl}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          youtubeWebSocketUrl: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="my-2 text-sm text-gray-600">
+                      {t('YoutubeWebSocketInfo')}
+                    </div>
+                  </>
+                )}
                 <div className="mt-6">
                   <div className="my-4 text-xl font-bold">
                     {t('ConversationContinuityMode')}

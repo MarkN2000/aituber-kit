@@ -127,6 +127,8 @@ interface Integrations {
   difyConversationId: string
   youtubeMode: boolean
   youtubeLiveId: string
+  youtubeCommentSource: 'api' | 'websocket'
+  youtubeWebSocketUrl: string
   youtubePlaying: boolean
   youtubeNextPageToken: string
   youtubeContinuationCount: number
@@ -361,6 +363,11 @@ const getInitialValuesFromEnv = (): SettingsState => ({
   difyConversationId: '',
   youtubeMode: process.env.NEXT_PUBLIC_YOUTUBE_MODE === 'true' ? true : false,
   youtubeLiveId: process.env.NEXT_PUBLIC_YOUTUBE_LIVE_ID || '',
+  youtubeCommentSource:
+    (process.env.NEXT_PUBLIC_YOUTUBE_COMMENT_SOURCE as 'api' | 'websocket') ||
+    'api',
+  youtubeWebSocketUrl:
+    process.env.NEXT_PUBLIC_YOUTUBE_WS_URL || 'ws://localhost:11180/sub',
   youtubePlaying: false,
   youtubeNextPageToken: '',
   youtubeContinuationCount: 0,
@@ -626,6 +633,8 @@ const settingsStore = create<SettingsState>()(
       difyUrl: state.difyUrl,
       difyConversationId: state.difyConversationId,
       youtubeLiveId: state.youtubeLiveId,
+      youtubeCommentSource: state.youtubeCommentSource,
+      youtubeWebSocketUrl: state.youtubeWebSocketUrl,
       characterName: state.characterName,
       characterPreset1: state.characterPreset1,
       characterPreset2: state.characterPreset2,
