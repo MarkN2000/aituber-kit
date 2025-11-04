@@ -1,6 +1,5 @@
 import settingsStore from '@/features/stores/settings'
 import {
-  getBestComment,
   getMessagesForSleep,
   getAnotherTopic,
   getMessagesForNewTopic,
@@ -143,30 +142,24 @@ export const processIncomingYoutubeComments = async (
     return false
   }
 
-  const ss = settingsStore.getState()
-  const hs = homeStore.getState()
-  const chatLog = messageSelectors.getTextAndImageMessages(hs.chatLog)
-
   settingsStore.setState({
     youtubeNoCommentCount: 0,
     youtubeSleepMode: false,
   })
 
-  let selectedComment = ''
-  if (ss.conversationContinuityMode) {
-    selectedComment = await getBestComment(chatLog, comments)
-  } else {
-    selectedComment =
-      comments[Math.floor(Math.random() * comments.length)].userComment
+  let hasSent = false
+
+  for (const comment of comments) {
+    if (!comment?.userComment) {
+      continue
+    }
+
+    console.log('selectedYoutubeComment:', comment.userComment)
+    await handleSendChat(comment.userComment)
+    hasSent = true
   }
 
-  if (!selectedComment) {
-    return false
-  }
-
-  console.log('selectedYoutubeComment:', selectedComment)
-  await handleSendChat(selectedComment)
-  return true
+  return hasSent
 }
 
 export const handleYoutubeNoComments = async (): Promise<void> => {
@@ -252,18 +245,13 @@ const pickFirstString = (...values: unknown[]): string => {
   return ''
 }
 
-type ProcessedIdsOption = {
-  processedIds?: Set<string>
-}
-
 const stripHtmlTags = (value: string): string =>
   value.replace(/<[^>]*>/g, '').trim()
 
 const normalizeService = (service: string): string => service.toLowerCase()
 
 export const mapOneCommePayloadToComments = (
-  payload: unknown,
-  options: ProcessedIdsOption = {}
+  payload: unknown
 ): YouTubeComments => {
   if (!isRecord(payload)) {
     return []
@@ -282,7 +270,6 @@ export const mapOneCommePayloadToComments = (
     return []
   }
 
-  const processedIds = options.processedIds
   const mappedComments: YouTubeComments = []
 
   for (const rawComment of comments) {
@@ -295,7 +282,6 @@ export const mapOneCommePayloadToComments = (
       continue
     }
 
-    const rawMeta = isRecord(rawComment.meta) ? rawComment.meta : undefined
     const rawData = isRecord(rawComment.data) ? rawComment.data : {}
 
     const rawHtml = pickFirstString(
@@ -332,41 +318,11 @@ export const mapOneCommePayloadToComments = (
     const userIconUrl =
       typeof rawData.profileImage === 'string' ? rawData.profileImage : ''
 
-    const commentId =
-      typeof rawComment.id === 'string' ? rawComment.id.trim() : ''
-    const dataId = typeof rawData.id === 'string' ? rawData.id.trim() : ''
-    const metaNoRaw = rawMeta?.no
-    let metaNo: string | undefined
-    if (typeof metaNoRaw === 'number') {
-      metaNo = metaNoRaw.toString()
-    } else if (typeof metaNoRaw === 'string' && metaNoRaw.trim() !== '') {
-      metaNo = metaNoRaw.trim()
-    }
-
-    const dedupeKey = pickFirstString(
-      commentId,
-      dataId,
-      metaNo ? `metaNo:${metaNo}` : ''
-    )
-
-    const fallbackKey = `${userName || 'YouTubeUser'}:${userComment}`
-
-    if (processedIds) {
-      const keyToCheck = dedupeKey || fallbackKey
-      if (processedIds.has(keyToCheck)) {
-        continue
-      }
-    }
-
     mappedComments.push({
       userName: userName || 'YouTubeUser',
       userIconUrl,
       userComment,
     })
-
-    if (processedIds) {
-      processedIds.add(dedupeKey || fallbackKey)
-    }
   }
 
   return mappedComments
