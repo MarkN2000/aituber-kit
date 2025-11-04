@@ -18,7 +18,7 @@
   "YoutubeCommentSourceWebsocket": "WebSocket（ワンコメ）",
   "YoutubeLiveCommentSettings": "コメント取得の設定",
   "YoutubeWebSocketUrl": "ワンコメ WebSocket URL",
-  "YoutubeWebSocketInfo": "ワンコメが提供するWebSocketを指定します。デフォルト: ws://localhost:11180/sub",
+  "YoutubeWebSocketInfo": "わんコメ（<0>https://onecomme.com</0>）が提供するWebSocketを指定します。デフォルト: ws://localhost:11180/sub この機能を使用するにはわんコメが起動している必要があります。無料版のわんコメを利用する際には、概要欄などにクレジットを記載してください。記載例：配信者のためのコメントアプリ「わんコメ」 <0>https://onecomme.com</0>",
   "YoutubeAPIKey": "YouTube API キー",
   "YoutubeLiveID": "YouTube Live ID",
   "ConversationContinuityMode": "会話継続モード（ベータ版）",

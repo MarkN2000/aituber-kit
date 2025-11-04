@@ -17,7 +17,7 @@
   "YoutubeCommentSourceWebsocket": "WebSocket (OneComme)",
   "YoutubeLiveCommentSettings": "Comment retrieval settings",
   "YoutubeWebSocketUrl": "OneComme WebSocket URL",
-  "YoutubeWebSocketInfo": "Specify the WebSocket provided by OneComme. Default: ws://localhost:11180/sub",
+  "YoutubeWebSocketInfo": "Specify the WebSocket from OneComme (<0>https://onecomme.com</0>). Default: ws://localhost:11180/sub. OneComme must be running to use this. When using the free version, please credit OneComme in your description. Example: Comment app 'OneComme' <0>https://onecomme.com</0>",
   "YoutubeAPIKey": "YouTube API Key",
   "YoutubeLiveID": "YouTube Live ID",
   "ConversationContinuityMode": "Conversation Continuity Mode (Beta)",

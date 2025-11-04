@@ -21,7 +21,6 @@ const useYoutube = ({ handleSendChat }: Params) => {
   const youtubeCommentSource = settingsStore((s) => s.youtubeCommentSource)
   const youtubeWebSocketUrl = settingsStore((s) => s.youtubeWebSocketUrl)
   const commentReceivedSinceLastTickRef = useRef(false)
-  const processedCommentIdsRef = useRef<Set<string>>(new Set())
 
   const fetchAndProcessCommentsCallback = useCallback(async () => {
     const ss = settingsStore.getState()
@@ -117,9 +116,7 @@ const useYoutube = ({ handleSendChat }: Params) => {
           return
         }
 
-        const mappedComments = mapOneCommePayloadToComments(payload, {
-          processedIds: processedCommentIdsRef.current,
-        })
+        const mappedComments = mapOneCommePayloadToComments(payload)
         if (mappedComments.length === 0) return
 
         commentReceivedSinceLastTickRef.current = true
@@ -156,7 +153,6 @@ const useYoutube = ({ handleSendChat }: Params) => {
       socket.addEventListener('close', handleClose)
     }
 
-    processedCommentIdsRef.current.clear()
     connect()
 
     return () => {
@@ -175,7 +171,6 @@ const useYoutube = ({ handleSendChat }: Params) => {
         }
       }
       socket = null
-      processedCommentIdsRef.current.clear()
     }
   }, [
     youtubePlaying,
