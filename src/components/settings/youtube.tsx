@@ -143,6 +143,27 @@ const YouTube = () => {
                     <div className="my-2 text-sm text-gray-600">
                       {t('YoutubeWebSocketInfo')}
                     </div>
+                    <div className="my-2 text-sm text-gray-600">
+                      わんコメ（
+                      <a
+                        href="https://onecomme.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        https://onecomme.com
+                      </a>
+                      ）が提供するWebSocketを指定します。デフォルト:
+                      ws://localhost:11180/sub
+                      <br />
+                      この機能を使用するにはわんコメが起動している必要があります。
+                      <br />
+                      無料版のわんコメを利用いただく際には、
+                      概要欄などにクレジットを記載してください。
+                      <br />
+                      記載例：配信者のためのコメントアプリ「わんコメ」
+                      https://onecomme.com
+                    </div>
                   </>
                 )}
                 <div className="mt-6">
