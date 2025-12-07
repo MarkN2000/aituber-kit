@@ -1,6 +1,67 @@
 import { Message } from './messages'
 import settingsStore from '@/features/stores/settings'
 
+const resolveTimeZoneDisplayName = (timeZone: string) => {
+  const overrides: Record<string, string> = {
+    'Asia/Tokyo': 'JST',
+  }
+  return overrides[timeZone] ?? timeZone
+}
+
+const formatTimestampWithTimeZone = (timestamp: string, timeZone: string) => {
+  if (!timestamp) return ''
+
+  const fallback = timestamp
+  const zone = timeZone?.trim() ? timeZone.trim() : 'UTC'
+
+  try {
+    const date = new Date(timestamp)
+    if (Number.isNaN(date.getTime())) {
+      return fallback
+    }
+
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3,
+      hour12: false,
+      timeZone: zone,
+      timeZoneName: 'short',
+    })
+
+    const parts = formatter.formatToParts(date)
+    const getPart = (type: string) =>
+      parts.find((part) => part.type === type)?.value ?? ''
+
+    const fractionalPart = (parts as Array<
+      Intl.DateTimeFormatPart & { type: string }
+    >).find((part) => part.type === 'fractionalSecond')?.value
+
+    const resolvedTimeZone = formatter.resolvedOptions().timeZone
+    const timeZonePart =
+      parts.find((part) => part.type === 'timeZoneName')?.value?.trim() ?? ''
+    const overrideDisplay = resolveTimeZoneDisplayName(resolvedTimeZone)
+    const displayZone =
+      overrideDisplay !== resolvedTimeZone
+        ? overrideDisplay
+        : timeZonePart || overrideDisplay
+
+    const fractionalSuffix = fractionalPart ? `.${fractionalPart}` : ''
+    return `${getPart('year')}-${getPart('month')}-${getPart(
+      'day'
+    )}T${getPart('hour')}:${getPart('minute')}:${getPart(
+      'second'
+    )}${fractionalSuffix} ${displayZone}`
+  } catch (error) {
+    console.warn('Failed to format timestamp with timezone', error)
+    return fallback
+  }
+}
+
 export const messageSelectors = {
   // テキストまたは画像を含むメッセージのみを取得
   getTextAndImageMessages: (messages: Message[]): Message[] => {
@@ -36,7 +97,7 @@ export const messageSelectors = {
     messages: Message[],
     includeTimestamp: boolean
   ): Message[] => {
-    const maxPastMessages = settingsStore.getState().maxPastMessages
+    const { maxPastMessages, timestampTimeZone } = settingsStore.getState()
     return messages
       .map((message, index) => {
         // 最後のメッセージだけそのまま利用する（= 最後のメッセージだけマルチモーダルの対象となる）
@@ -47,8 +108,11 @@ export const messageSelectors = {
 
         let content: Message['content']
         if (includeTimestamp) {
-          content = message.timestamp
-            ? `[${message.timestamp}] ${messageText}`
+          const formattedTimestamp = message.timestamp
+            ? formatTimestampWithTimeZone(message.timestamp, timestampTimeZone)
+            : ''
+          content = formattedTimestamp
+            ? `[${formattedTimestamp}] ${messageText}`
             : messageText
           if (isLastMessage && Array.isArray(message.content)) {
             content = [
