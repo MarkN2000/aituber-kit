@@ -40,6 +40,7 @@ export const getLiveChatId = async (
 }
 
 type YouTubeComment = {
+  id?: string
   userName: string
   userIconUrl: string
   userComment: string
@@ -74,6 +75,7 @@ const retrieveLiveComments = async (
 
   const comments = items
     .map((item: any) => ({
+      id: item.id,
       userName: item.authorDetails.displayName,
       userIconUrl: item.authorDetails.profileImageUrl,
       userComment:
@@ -94,7 +96,9 @@ const retrieveLiveComments = async (
 }
 
 const retrieveOnecommeComments = async (
-  onecommeUrl: string
+  onecommeUrl: string,
+  lastCommentId: string,
+  setLastCommentId: (id: string) => void
 ): Promise<YouTubeComments> => {
   console.log('retrieveOnecommeComments')
   try {
@@ -105,19 +109,57 @@ const retrieveOnecommeComments = async (
       },
     })
     const json = await response.json()
-    const commentsData = json.comments || []
+    console.log('OneComme Response:', json)
+    const commentsData = Array.isArray(json) ? json : []
 
     const comments = commentsData
       .map((item: any) => ({
-        userName: item.name,
-        userIconUrl: item.profileImage,
-        userComment: item.data,
+        id: item.data?.id || item.id || '',
+        userName: item.data?.name || item.name || 'Unknown',
+        userIconUrl: item.data?.profileImage || item.profileImage || '',
+        userComment: item.data?.comment || item.comment || '',
       }))
       .filter(
         (comment: any) =>
           comment.userComment !== '' && !comment.userComment.startsWith('#')
       )
-    return comments
+    
+    if (comments.length === 0) return []
+
+    let newComments: YouTubeComment[] = []
+
+    if (lastCommentId) {
+      const lastIndex = comments.findIndex((c: any) => c.id === lastCommentId)
+      if (lastIndex !== -1) {
+        // IDが見つかった場合: それ以降のコメントを新規とする
+        newComments = comments.slice(lastIndex + 1)
+      } else {
+        // IDが見つからない場合 (ログ流れ、再起動後など):
+        // 安全のため、最新の1件だけを処理する
+        newComments = [comments[comments.length - 1]]
+      }
+    } else {
+      // 初回起動時 (lastCommentIdがない場合):
+      // 過去ログを全て読み上げないよう、最新の1件だけを処理する
+      newComments = [comments[comments.length - 1]]
+    }
+
+    // IDが見つかった場合に、処理する件数を最大2件に制限する
+    if (newComments.length > 2) {
+      newComments = newComments.slice(-2)
+    }
+
+    console.log('Processed OneComme Comments:', newComments)
+
+    if (newComments.length > 0) {
+      setLastCommentId(newComments[newComments.length - 1].id || '')
+    } else if (comments.length > 0 && !lastCommentId) {
+      // 初回でフィルタリングにより0件になった場合なども、
+      // 次回以降のために最新IDは保存しておく
+      setLastCommentId(comments[comments.length - 1].id || '')
+    }
+
+    return newComments
   } catch (error) {
     console.error('Error fetching OneComme comments:', error)
     return []
@@ -178,7 +220,11 @@ export const fetchAndProcessComments = async (
 
       // コメントを取得
       if (ss.selectCommentSource === 'onecomme') {
-        youtubeComments = await retrieveOnecommeComments(ss.onecommeUrl)
+        youtubeComments = await retrieveOnecommeComments(
+          ss.onecommeUrl,
+          ss.onecommeLastCommentId,
+          (id) => settingsStore.setState({ onecommeLastCommentId: id })
+        )
       } else {
         const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
         if (liveChatId) {
