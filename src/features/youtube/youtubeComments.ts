@@ -54,7 +54,6 @@ const retrieveLiveComments = async (
   youtubeNextPageToken: string,
   setYoutubeNextPageToken: (token: string) => void
 ): Promise<YouTubeComments> => {
-  console.log('retrieveLiveComments')
   let url =
     'https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=' +
     activeLiveChatId +
@@ -100,7 +99,6 @@ const retrieveOnecommeComments = async (
   lastCommentId: string,
   setLastCommentId: (id: string) => void
 ): Promise<YouTubeComments> => {
-  console.log('retrieveOnecommeComments')
   try {
     const response = await fetch(`${onecommeUrl}/api/comments`, {
       method: 'get',
@@ -109,7 +107,6 @@ const retrieveOnecommeComments = async (
       },
     })
     const json = await response.json()
-    console.log('OneComme Response:', json)
     const commentsData = Array.isArray(json) ? json : []
 
     const comments = commentsData
@@ -148,8 +145,6 @@ const retrieveOnecommeComments = async (
     if (newComments.length > 2) {
       newComments = newComments.slice(-2)
     }
-
-    console.log('Processed OneComme Comments:', newComments)
 
     if (newComments.length > 0) {
       setLastCommentId(newComments[newComments.length - 1].id || '')
@@ -250,7 +245,6 @@ export const fetchAndProcessComments = async (
             youtubeComments[Math.floor(Math.random() * youtubeComments.length)]
               .userComment
         }
-        console.log('selectedYoutubeComment:', selectedComment)
 
         handleSendChat(selectedComment)
       } else {
@@ -286,7 +280,6 @@ export const fetchAndProcessComments = async (
             settingsStore.setState({ youtubeSleepMode: true })
           }
         }
-        console.log('YoutubeNoCommentCount:', noCommentCount)
         settingsStore.setState({ youtubeNoCommentCount: noCommentCount })
       }
     }
