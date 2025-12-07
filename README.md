@@ -332,6 +332,8 @@ AITuberKitの発展にご協力いただき、ありがとうございます。�
 
 - [ロゴの利用規約](./docs/logo_licence.md)
 - [VRMおよびLive2Dモデルの利用規約](./docs/character_model_licence.md)
+- [わんコメ利用規約](https://onecomme.com/terms#%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88%E8%A1%A8%E8%A8%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+
 
 ## 優先実装について
 

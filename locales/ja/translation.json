@@ -16,7 +16,7 @@
   "CommentSourceYoutube": "YouTube Live API",
   "CommentSourceOnecomme": "わんコメ (OneComme)",
   "OnecommeURL": "わんコメ API URL",
-  "OnecommeInfo": "わんコメのHTTP APIを使用してコメントを取得します。わんコメ側で「HTTPサーバー」機能を有効にしてください。",
+  "OnecommeInfo": "わんコメのHTTP APIを使用してコメントを取得します。この機能を使用するには同じPC上でわんコメが起動している必要があります。\n\nわんコメを使用する際はわんコメの利用規約に従うようにしてください。\n\n配信等で無料版のわんコメを利用する際には、概要欄などに以下の記載例のようなクレジットを記載してください\n\n\"配信者のためのコメントアプリ「わんコメ」https://onecomme.com\"",
   "YoutubeInfo": "先頭が「#」のコメントは無視されます。",
   "YoutubeAPIKey": "YouTube API キー",
   "YoutubeLiveID": "YouTube Live ID",
