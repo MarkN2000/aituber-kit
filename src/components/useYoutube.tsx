@@ -3,7 +3,8 @@ import homeStore from '@/features/stores/home'
 import settingsStore from '@/features/stores/settings'
 import { fetchAndProcessComments } from '@/features/youtube/youtubeComments'
 
-const INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS = 10000 // 10秒
+const INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS_YOUTUBE = 10000 // 10秒
+const INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS_ONECOMME = 2000 // 2秒
 
 interface Params {
   handleSendChat: (text: string) => Promise<void>
@@ -11,6 +12,7 @@ interface Params {
 
 const useYoutube = ({ handleSendChat }: Params) => {
   const youtubePlaying = settingsStore((s) => s.youtubePlaying)
+  const selectCommentSource = settingsStore((s) => s.selectCommentSource)
 
   const fetchAndProcessCommentsCallback = useCallback(async () => {
     const ss = settingsStore.getState()
@@ -35,12 +37,17 @@ const useYoutube = ({ handleSendChat }: Params) => {
     if (!youtubePlaying) return
     fetchAndProcessCommentsCallback()
 
+    const intervalTime =
+      selectCommentSource === 'onecomme'
+        ? INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS_ONECOMME
+        : INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS_YOUTUBE
+
     const intervalId = setInterval(() => {
       fetchAndProcessCommentsCallback()
-    }, INTERVAL_MILL_SECONDS_RETRIEVING_COMMENTS)
+    }, intervalTime)
 
     return () => clearInterval(intervalId)
-  }, [youtubePlaying, fetchAndProcessCommentsCallback])
+  }, [youtubePlaying, fetchAndProcessCommentsCallback, selectCommentSource])
 }
 
 export default useYoutube
