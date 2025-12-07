@@ -52,6 +52,10 @@ AITuberKitは、誰でも簡単にAIキャラクターとチャットできるWe
 
 詳細な使用方法や設定方法については、[ドキュメントサイト](https://docs.aituberkit.com/)をご覧ください。
 
+### これは本家AITuberKitをMarkNがフォークしたものです
+
+[!["MarkNのホームページ"](https://markn2000.com/images/default_thumbnail.webp)](https://markn2000.com/)
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=tegnike/aituber-kit&type=Date)](https://star-history.com/#tegnike/aituber-kit&Date)
@@ -126,7 +130,7 @@ AITuberKitは、誰でも簡単にAIキャラクターとチャットできるWe
 1. リポジトリをローカルにクローンします。
 
 ```bash
-git clone https://github.com/tegnike/aituber-kit.git
+git clone https://github.com/MarkN2000/aituber-kit.git
 ```
 
 2. フォルダを開きます。
