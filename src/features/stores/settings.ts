@@ -133,6 +133,9 @@ interface Integrations {
   youtubeNoCommentCount: number
   youtubeSleepMode: boolean
   conversationContinuityMode: boolean
+  selectCommentSource: 'youtube' | 'onecomme'
+  onecommeUrl: string
+  onecommeLastCommentId: string
 }
 
 interface Character {
@@ -368,6 +371,9 @@ const getInitialValuesFromEnv = (): SettingsState => ({
   youtubeNoCommentCount: 0,
   youtubeSleepMode: false,
   conversationContinuityMode: false,
+  selectCommentSource: 'youtube',
+  onecommeUrl: 'http://127.0.0.1:11180',
+  onecommeLastCommentId: '',
 
   // Character
   characterName: process.env.NEXT_PUBLIC_CHARACTER_NAME || 'CHARACTER',
@@ -629,6 +635,9 @@ const settingsStore = create<SettingsState>()(
       difyUrl: state.difyUrl,
       difyConversationId: state.difyConversationId,
       youtubeLiveId: state.youtubeLiveId,
+      selectCommentSource: state.selectCommentSource,
+      onecommeUrl: state.onecommeUrl,
+      onecommeLastCommentId: state.onecommeLastCommentId,
       characterName: state.characterName,
       characterPreset1: state.characterPreset1,
       characterPreset2: state.characterPreset2,

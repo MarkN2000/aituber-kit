@@ -23,6 +23,8 @@ const YouTube = () => {
     (s) => s.conversationContinuityMode
   )
   const slideMode = settingsStore((s) => s.slideMode)
+  const selectCommentSource = settingsStore((s) => s.selectCommentSource)
+  const onecommeUrl = settingsStore((s) => s.onecommeUrl)
 
   const { t } = useTranslation()
 
@@ -68,35 +70,84 @@ const YouTube = () => {
           if (youtubeMode) {
             return (
               <>
-                <div className="">{t('YoutubeInfo')}</div>
                 <div className="my-4 text-xl font-bold">
-                  {t('YoutubeAPIKey')}
+                  {t('SelectCommentSource')}
                 </div>
-                <input
-                  className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
-                  type="text"
-                  placeholder="..."
-                  value={youtubeApiKey}
-                  onChange={(e) =>
-                    settingsStore.setState({
-                      youtubeApiKey: e.target.value,
-                    })
-                  }
-                />
-                <div className="my-4 text-xl font-bold">
-                  {t('YoutubeLiveID')}
+                <div className="flex gap-4 mb-4">
+                  <TextButton
+                    onClick={() =>
+                      settingsStore.setState({ selectCommentSource: 'youtube' })
+                    }
+                    className={
+                      selectCommentSource === 'youtube' ? 'bg-secondary' : ''
+                    }
+                  >
+                    {t('CommentSourceYoutube')}
+                  </TextButton>
+                  <TextButton
+                    onClick={() =>
+                      settingsStore.setState({ selectCommentSource: 'onecomme' })
+                    }
+                    className={
+                      selectCommentSource === 'onecomme' ? 'bg-secondary' : ''
+                    }
+                  >
+                    {t('CommentSourceOnecomme')}
+                  </TextButton>
                 </div>
-                <input
-                  className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
-                  type="text"
-                  placeholder="..."
-                  value={youtubeLiveId}
-                  onChange={(e) =>
-                    settingsStore.setState({
-                      youtubeLiveId: e.target.value,
-                    })
-                  }
-                />
+
+                {selectCommentSource === 'youtube' ? (
+                  <>
+                    <div className="">{t('YoutubeInfo')}</div>
+                    <div className="my-4 text-xl font-bold">
+                      {t('YoutubeAPIKey')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="..."
+                      value={youtubeApiKey}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          youtubeApiKey: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="my-4 text-xl font-bold">
+                      {t('YoutubeLiveID')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="..."
+                      value={youtubeLiveId}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          youtubeLiveId: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="">{t('OnecommeInfo')}</div>
+                    <div className="my-4 text-xl font-bold">
+                      {t('OnecommeURL')}
+                    </div>
+                    <input
+                      className="text-ellipsis px-4 py-2 w-full bg-white hover:bg-white-hover rounded-lg"
+                      type="text"
+                      placeholder="http://127.0.0.1:11180"
+                      value={onecommeUrl}
+                      onChange={(e) =>
+                        settingsStore.setState({
+                          onecommeUrl: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                )}
+
                 <div className="mt-6">
                   <div className="my-4 text-xl font-bold">
                     {t('ConversationContinuityMode')}
