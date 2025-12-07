@@ -40,6 +40,7 @@ export const getLiveChatId = async (
 }
 
 type YouTubeComment = {
+  id?: string
   userName: string
   userIconUrl: string
   userComment: string
@@ -74,6 +75,7 @@ const retrieveLiveComments = async (
 
   const comments = items
     .map((item: any) => ({
+      id: item.id,
       userName: item.authorDetails.displayName,
       userIconUrl: item.authorDetails.profileImageUrl,
       userComment:
@@ -93,6 +95,77 @@ const retrieveLiveComments = async (
   return comments
 }
 
+const retrieveOnecommeComments = async (
+  onecommeUrl: string,
+  lastCommentId: string,
+  setLastCommentId: (id: string) => void
+): Promise<YouTubeComments> => {
+  console.log('retrieveOnecommeComments')
+  try {
+    const response = await fetch(`${onecommeUrl}/api/comments`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const json = await response.json()
+    console.log('OneComme Response:', json)
+    const commentsData = Array.isArray(json) ? json : []
+
+    const comments = commentsData
+      .map((item: any) => ({
+        id: item.data?.id || item.id || '',
+        userName: item.data?.name || item.name || 'Unknown',
+        userIconUrl: item.data?.profileImage || item.profileImage || '',
+        userComment: item.data?.comment || item.comment || '',
+      }))
+      .filter(
+        (comment: any) =>
+          comment.userComment !== '' && !comment.userComment.startsWith('#')
+      )
+    
+    if (comments.length === 0) return []
+
+    let newComments: YouTubeComment[] = []
+
+    if (lastCommentId) {
+      const lastIndex = comments.findIndex((c: any) => c.id === lastCommentId)
+      if (lastIndex !== -1) {
+        // IDが見つかった場合: それ以降のコメントを新規とする
+        newComments = comments.slice(lastIndex + 1)
+      } else {
+        // IDが見つからない場合 (ログ流れ、再起動後など):
+        // 安全のため、最新の1件だけを処理する
+        newComments = [comments[comments.length - 1]]
+      }
+    } else {
+      // 初回起動時 (lastCommentIdがない場合):
+      // 過去ログを全て読み上げないよう、最新の1件だけを処理する
+      newComments = [comments[comments.length - 1]]
+    }
+
+    // IDが見つかった場合に、処理する件数を最大2件に制限する
+    if (newComments.length > 2) {
+      newComments = newComments.slice(-2)
+    }
+
+    console.log('Processed OneComme Comments:', newComments)
+
+    if (newComments.length > 0) {
+      setLastCommentId(newComments[newComments.length - 1].id || '')
+    } else if (comments.length > 0 && !lastCommentId) {
+      // 初回でフィルタリングにより0件になった場合なども、
+      // 次回以降のために最新IDは保存しておく
+      setLastCommentId(comments[comments.length - 1].id || '')
+    }
+
+    return newComments
+  } catch (error) {
+    console.error('Error fetching OneComme comments:', error)
+    return []
+  }
+}
+
 export const fetchAndProcessComments = async (
   handleSendChat: (text: string) => void
 ): Promise<void> => {
@@ -101,9 +174,25 @@ export const fetchAndProcessComments = async (
   const chatLog = messageSelectors.getTextAndImageMessages(hs.chatLog)
 
   try {
-    const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+    let youtubeComments: YouTubeComments = []
+    
+    // 会話継続チェック処理
+    // 注: わんコメの場合も会話継続モードは機能させるが、
+    // liveChatIdの取得チェックはYouTubeモードのときのみ行う形に分岐する
+    
+    // 処理実行フラグ
+    let shouldFetchComments = false
 
-    if (liveChatId) {
+    if (ss.selectCommentSource === 'onecomme') {
+      shouldFetchComments = true
+    } else {
+      const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+      if (liveChatId) {
+        shouldFetchComments = true
+      }
+    }
+
+    if (shouldFetchComments) {
       // 会話の継続が必要かどうかを確認
       if (
         !ss.youtubeSleepMode &&
@@ -130,13 +219,25 @@ export const fetchAndProcessComments = async (
       settingsStore.setState({ youtubeContinuationCount: 0 })
 
       // コメントを取得
-      const youtubeComments = await retrieveLiveComments(
-        liveChatId,
-        ss.youtubeApiKey,
-        ss.youtubeNextPageToken,
-        (token: string) =>
-          settingsStore.setState({ youtubeNextPageToken: token })
-      )
+      if (ss.selectCommentSource === 'onecomme') {
+        youtubeComments = await retrieveOnecommeComments(
+          ss.onecommeUrl,
+          ss.onecommeLastCommentId,
+          (id) => settingsStore.setState({ onecommeLastCommentId: id })
+        )
+      } else {
+        const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+        if (liveChatId) {
+           youtubeComments = await retrieveLiveComments(
+            liveChatId,
+            ss.youtubeApiKey,
+            ss.youtubeNextPageToken,
+            (token: string) =>
+              settingsStore.setState({ youtubeNextPageToken: token })
+          )
+        }
+      }
+
       // ランダムなコメントを選択して送信
       if (youtubeComments.length > 0) {
         settingsStore.setState({ youtubeNoCommentCount: 0 })
