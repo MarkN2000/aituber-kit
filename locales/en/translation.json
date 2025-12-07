@@ -23,6 +23,8 @@
   "StatusOff": "Status: OFF",
   "CustomModelOn": "Use custom model: ON",
   "CustomModelOff": "Use custom model: OFF",
+  "ManualInputOn": "Manual input: ON",
+  "ManualInputOff": "Manual input: OFF",
   "CustomModelPlaceholder": "Enter custom model name...",
   "Select": "Please select",
   "TestVoice": "Test Voice",
