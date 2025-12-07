@@ -17,7 +17,11 @@ interface ModelInfo {
  */
 const modelDefinitions: Record<AIService, ModelInfo[]> = {
   openai: [
-    { name: 'gpt-4.1', multiModal: true, isDefault: true },
+    { name: 'gpt-5.1', multiModal: true, isDefault: true },
+    { name: 'gpt-5-pro', multiModal: true },
+    { name: 'gpt-5-mini', multiModal: true },
+    { name: 'gpt-5-nano', multiModal: true },
+    { name: 'gpt-4.1', multiModal: true },
     { name: 'gpt-4.1-mini', multiModal: true },
     { name: 'gpt-4.1-nano', multiModal: true },
     { name: 'gpt-4o', multiModal: true },
@@ -31,28 +35,22 @@ const modelDefinitions: Record<AIService, ModelInfo[]> = {
     { name: 'chatgpt-4o-latest', multiModal: true },
   ],
   anthropic: [
+    { name: 'claude-sonnet-4-5-20250929', multiModal: true, isDefault: true },
+    { name: 'claude-haiku-4-5-20251001', multiModal: true },
+    { name: 'claude-opus-4-5-20251101', multiModal: true },
     { name: 'claude-opus-4-1-20250805', multiModal: true },
     { name: 'claude-opus-4-20250514', multiModal: true },
     { name: 'claude-sonnet-4-20250514', multiModal: true },
     { name: 'claude-3-7-sonnet-20250219', multiModal: true },
-    { name: 'claude-3-5-sonnet-20241022', multiModal: true, isDefault: true },
+    { name: 'claude-3-5-sonnet-20241022', multiModal: true},
     { name: 'claude-3-5-sonnet-20240620', multiModal: true },
     { name: 'claude-3-5-haiku-20241022', multiModal: true },
   ],
   google: [
+    { name: 'gemini-3-pro-preview', multiModal: true },
     { name: 'gemini-2.5-pro', multiModal: true },
-    { name: 'gemini-2.5-flash', multiModal: true },
+    { name: 'gemini-2.5-flash', multiModal: true, isDefault: true },
     { name: 'gemini-2.5-flash-lite', multiModal: true },
-    { name: 'gemini-2.5-pro-preview-05-06', multiModal: true },
-    { name: 'gemini-2.5-flash-preview-04-17', multiModal: true },
-    { name: 'gemini-2.5-pro-exp-03-25', multiModal: true },
-    { name: 'gemini-2.0-flash', multiModal: true },
-    { name: 'gemini-1.5-pro', multiModal: true },
-    { name: 'gemini-1.5-pro-latest', multiModal: true },
-    { name: 'gemini-1.5-flash', multiModal: true },
-    { name: 'gemini-1.5-flash-latest', multiModal: true, isDefault: true },
-    { name: 'gemini-1.5-flash-8b', multiModal: true },
-    { name: 'gemini-1.5-flash-8b-latest', multiModal: true },
   ],
   azure: [],
   xai: [
@@ -333,15 +331,10 @@ export function isMultiModalAvailable(
 }
 
 export const googleSearchGroundingModels = [
+  'gemini-3-pro-preview',
   'gemini-2.5-flash',
   'gemini-2.5-flash-lite',
   'gemini-2.5-pro',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-pro-latest',
-  'gemini-1.5-flash-8b-latest',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
-  'gemini-1.5-flash-8b',
 ] as const
 
 /**
