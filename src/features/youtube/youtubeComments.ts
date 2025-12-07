@@ -93,6 +93,37 @@ const retrieveLiveComments = async (
   return comments
 }
 
+const retrieveOnecommeComments = async (
+  onecommeUrl: string
+): Promise<YouTubeComments> => {
+  console.log('retrieveOnecommeComments')
+  try {
+    const response = await fetch(`${onecommeUrl}/api/comments`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const json = await response.json()
+    const commentsData = json.comments || []
+
+    const comments = commentsData
+      .map((item: any) => ({
+        userName: item.name,
+        userIconUrl: item.profileImage,
+        userComment: item.data,
+      }))
+      .filter(
+        (comment: any) =>
+          comment.userComment !== '' && !comment.userComment.startsWith('#')
+      )
+    return comments
+  } catch (error) {
+    console.error('Error fetching OneComme comments:', error)
+    return []
+  }
+}
+
 export const fetchAndProcessComments = async (
   handleSendChat: (text: string) => void
 ): Promise<void> => {
@@ -101,9 +132,25 @@ export const fetchAndProcessComments = async (
   const chatLog = messageSelectors.getTextAndImageMessages(hs.chatLog)
 
   try {
-    const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+    let youtubeComments: YouTubeComments = []
+    
+    // 会話継続チェック処理
+    // 注: わんコメの場合も会話継続モードは機能させるが、
+    // liveChatIdの取得チェックはYouTubeモードのときのみ行う形に分岐する
+    
+    // 処理実行フラグ
+    let shouldFetchComments = false
 
-    if (liveChatId) {
+    if (ss.selectCommentSource === 'onecomme') {
+      shouldFetchComments = true
+    } else {
+      const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+      if (liveChatId) {
+        shouldFetchComments = true
+      }
+    }
+
+    if (shouldFetchComments) {
       // 会話の継続が必要かどうかを確認
       if (
         !ss.youtubeSleepMode &&
@@ -130,13 +177,21 @@ export const fetchAndProcessComments = async (
       settingsStore.setState({ youtubeContinuationCount: 0 })
 
       // コメントを取得
-      const youtubeComments = await retrieveLiveComments(
-        liveChatId,
-        ss.youtubeApiKey,
-        ss.youtubeNextPageToken,
-        (token: string) =>
-          settingsStore.setState({ youtubeNextPageToken: token })
-      )
+      if (ss.selectCommentSource === 'onecomme') {
+        youtubeComments = await retrieveOnecommeComments(ss.onecommeUrl)
+      } else {
+        const liveChatId = await getLiveChatId(ss.youtubeLiveId, ss.youtubeApiKey)
+        if (liveChatId) {
+           youtubeComments = await retrieveLiveComments(
+            liveChatId,
+            ss.youtubeApiKey,
+            ss.youtubeNextPageToken,
+            (token: string) =>
+              settingsStore.setState({ youtubeNextPageToken: token })
+          )
+        }
+      }
+
       // ランダムなコメントを選択して送信
       if (youtubeComments.length > 0) {
         settingsStore.setState({ youtubeNoCommentCount: 0 })
