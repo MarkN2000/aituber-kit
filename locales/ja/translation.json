@@ -29,6 +29,8 @@
   "StatusOff": "状態：OFF",
   "CustomModelOn": "カスタムモデルを使用: ON",
   "CustomModelOff": "カスタムモデルを使用: OFF",
+  "ManualInputOn": "手動入力: ON",
+  "ManualInputOff": "手動入力: OFF",
   "CustomModelPlaceholder": "カスタムモデル名を入力...",
   "Select": "選択してください",
   "TestVoice": "ボイスを試聴する",

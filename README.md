@@ -1,3 +1,9 @@
+### これは本家AITuberKitをMarkNがフォークしたものです
+
+- [MarkNのホームページ](https://markn2000.com/)
+
+[!["MarkNのホームページ"](https://markn2000.com/images/default_thumbnail.webp)](https://markn2000.com/)
+
 # AITuberKit
 
 <img style="max-width: 100%;" src="./public/ogp.png">
@@ -126,7 +132,7 @@ AITuberKitは、誰でも簡単にAIキャラクターとチャットできるWe
 1. リポジトリをローカルにクローンします。
 
 ```bash
-git clone https://github.com/tegnike/aituber-kit.git
+git clone https://github.com/MarkN2000/aituber-kit.git
 ```
 
 2. フォルダを開きます。
