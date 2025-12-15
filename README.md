@@ -1,8 +1,8 @@
 ### これは本家AITuberKitをMarkNがフォークしたものです
 
-- [MarkNのホームページ](https://markn2000.com/)
+- <a href="https://markn2000.com/" target="_blank" rel="noopener noreferrer">MarkNのホームページ</a>
 
-[!["MarkNのホームページ"](https://markn2000.com/images/default_thumbnail.webp)](https://markn2000.com/)
+<a href="https://markn2000.com/" target="_blank" rel="noopener noreferrer"><img alt="MarkNのホームページ" src="https://markn2000.com/images/default_thumbnail.webp"></a>
 
 # AITuberKit
 
