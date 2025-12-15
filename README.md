@@ -1,3 +1,8 @@
+### これは本家AITuberKitをMarkNがフォークしたものです
+
+- [MarkNのホームページ](https://markn2000.com/)
+[!["MarkNのホームページ"](https://markn2000.com/images/default_thumbnail.webp)](https://markn2000.com/)
+
 # AITuberKit
 
 <img style="max-width: 100%;" src="./public/ogp.png">
@@ -51,11 +56,6 @@ AITuberKitは、誰でも簡単にAIキャラクターとチャットできるWe
 <img src="./docs/images/architecture.svg" alt="AITuberKit Architecture">
 
 詳細な使用方法や設定方法については、[ドキュメントサイト](https://docs.aituberkit.com/)をご覧ください。
-
-### これは本家AITuberKitをMarkNがフォークしたものです
-
-- [MarkNのホームページ](https://markn2000.com/)
-[!["MarkNのホームページ"](https://markn2000.com/images/default_thumbnail.webp)](https://markn2000.com/)
 
 ## Star History
 
