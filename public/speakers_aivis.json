@@ -1,38 +1,26 @@
 [
   {
-    "speaker": "Anneli/ノーマル",
+    "speaker": "まお/ノーマル",
     "id": 888753760
   },
   {
-    "speaker": "Anneli/通常",
+    "speaker": "まお/ふつー",
     "id": 888753761
   },
   {
-    "speaker": "Anneli/テンション高め",
+    "speaker": "まお/あまあま",
     "id": 888753762
   },
   {
-    "speaker": "Anneli/落ち着き",
+    "speaker": "まお/おちつき",
     "id": 888753763
   },
   {
-    "speaker": "Anneli/上機嫌",
+    "speaker": "まお/からかい",
     "id": 888753764
   },
   {
-    "speaker": "Anneli/怒り・悲しみ",
+    "speaker": "まお/せつなめ",
     "id": 888753765
-  },
-  {
-    "speaker": "Anneli (NSFW)/ノーマル",
-    "id": 1196801504
-  },
-  {
-    "speaker": "Anneli_Tsukuyomi/ノーマル",
-    "id": 40618528
-  },
-  {
-    "speaker": "fumifumi/ノーマル",
-    "id": 606865152
   }
 ]
