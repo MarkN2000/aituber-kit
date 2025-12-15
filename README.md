@@ -1,4 +1,4 @@
-### これは本家AITuberKitをMarkNがフォークしたものです
+### これは<a href="https://github.com/tegnike/aituber-kit" target="_blank" rel="noopener noreferrer">本家AITuberKit</a>をMarkNがフォークしたものです
 
 - <a href="https://markn2000.com/" target="_blank" rel="noopener noreferrer">MarkNのホームページ</a>
 
