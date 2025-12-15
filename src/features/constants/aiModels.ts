@@ -17,8 +17,10 @@ interface ModelInfo {
  */
 const modelDefinitions: Record<AIService, ModelInfo[]> = {
   openai: [
-    { name: 'gpt-5.1', multiModal: true, isDefault: true },
-    { name: 'gpt-5-pro', multiModal: true },
+    { name: 'gpt-5.2-2025-12-11', multiModal: true, isDefault: true },
+    { name: 'gpt-5.2-pro-2025-12-11', multiModal: true },
+    { name: 'gpt-5.1', multiModal: true },
+    { name: 'gpt-5.1-pro', multiModal: true },
     { name: 'gpt-5-mini', multiModal: true },
     { name: 'gpt-5-nano', multiModal: true },
     { name: 'gpt-4.1', multiModal: true },
@@ -54,11 +56,12 @@ const modelDefinitions: Record<AIService, ModelInfo[]> = {
   ],
   azure: [],
   xai: [
-    { name: 'grok-3', isDefault: true },
+    { name: 'grok-4-1-fast-reasoning', isDefault: true },
+    { name: 'grok-4-1-fast-non-reasoning' },
+    { name: 'grok-3'},
     { name: 'grok-3-fast' },
     { name: 'grok-3-mini' },
     { name: 'grok-3-mini-fast' },
-    { name: 'grok-2-1212' },
     { name: 'grok-2-vision-1212', multiModal: true },
   ],
   groq: [
@@ -199,6 +202,8 @@ export function getMultiModalModels(service: AIService): string[] {
  * OpenAIのリアルタイムAPIモードで使用するモデル一覧
  */
 export const openAIRealtimeModels = [
+  'gpt-realtime-2025-08-28',
+  'gpt-realtime-mini-2025-10-06',
   'gpt-4o-realtime-preview-2024-10-01',
   'gpt-4o-realtime-preview-2024-12-17',
   'gpt-4o-mini-realtime-preview-2024-12-17',
@@ -208,6 +213,8 @@ export const openAIRealtimeModels = [
  * OpenAIのオーディオAPIモードで使用するモデル一覧
  */
 export const openAIAudioModels = [
+  'gpt-audio-2025-08-28',
+  'gpt-audio-mini-2025-10-06',
   'gpt-4o-audio-preview-2024-10-01',
   'gpt-4o-audio-preview-2024-12-17',
   'gpt-4o-mini-audio-preview-2024-12-17',
