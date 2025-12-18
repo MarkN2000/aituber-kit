@@ -1,8 +1,8 @@
 ### これは<a href="https://github.com/tegnike/aituber-kit" target="_blank" rel="noopener noreferrer">本家AITuberKit</a>をMarkNがフォークしたものです
 
-Node.jsはv22.~とかの最新だとエラーになるのでv20.18.3とかをインストールしてから使ってね<br>
+Node.jsは最新だとエラーになるのでv20.18.3とかをインストールしてから使ってね<br>
 プルリクエストやフォーク大歓迎<br>
-機能ごとにブランチを分けてあるので、本家に欲しい機能のブランチをマージして使うこともできるよ（mainブランチは全部入り）（useとdevelopは無視して）
+機能ごとにブランチを分けてあるよ（mainブランチは全部入り）（useとdevelopは無視して）
 
 - <a href="https://markn2000.com/" target="_blank" rel="noopener noreferrer">MarkNのホームページ</a>
 
