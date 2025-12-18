@@ -50,8 +50,9 @@ const modelDefinitions: Record<AIService, ModelInfo[]> = {
   ],
   google: [
     { name: 'gemini-3-pro-preview', multiModal: true },
+    { name: 'gemini-3-flash-preview', multiModal: true, isDefault: true  },
     { name: 'gemini-2.5-pro', multiModal: true },
-    { name: 'gemini-2.5-flash', multiModal: true, isDefault: true },
+    { name: 'gemini-2.5-flash', multiModal: true},
     { name: 'gemini-2.5-flash-lite', multiModal: true },
   ],
   azure: [],
@@ -339,6 +340,7 @@ export function isMultiModalAvailable(
 
 export const googleSearchGroundingModels = [
   'gemini-3-pro-preview',
+  'gemini-3-flash-preview',
   'gemini-2.5-flash',
   'gemini-2.5-flash-lite',
   'gemini-2.5-pro',
