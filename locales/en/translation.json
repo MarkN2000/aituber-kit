@@ -349,6 +349,8 @@
   "DynamicRetrieval": "Dynamic Search",
   "OpenRouterModelNameInstruction": "Please enter the model identifier from OpenRouter (e.g., \"openai/gpt-4o\", \"mistralai/mistral-large-latest\"). You can check the model identifier on the OpenRouter model page.",
   "DynamicRetrievalThreshold": "Dynamic threshold",
+  "GeminiThinkingLevel": "Gemini Thinking Level",
+  "GeminiThinkingLevelDescription": "Controls the depth of reasoning for Gemini 3 series models. Higher levels are better for complex tasks but increase response time.",
   "OpenRouterAPIKeyLabel": "OpenRouter API Key",
   "ImageDisplayPosition": "Image display position",
   "ImageDisplayPositionDescription": "Please select the position to display the uploaded image",

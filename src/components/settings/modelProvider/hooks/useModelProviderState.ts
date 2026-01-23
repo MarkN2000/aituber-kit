@@ -28,6 +28,7 @@ export const useModelProviderState = () => {
   const dynamicRetrievalThreshold = settingsStore(
     (s) => s.dynamicRetrievalThreshold
   )
+  const geminiThinkingLevel = settingsStore((s) => s.geminiThinkingLevel)
   const deepseekKey = settingsStore((s) => s.deepseekKey)
   const openrouterKey = settingsStore((s) => s.openrouterKey)
   const maxPastMessages = settingsStore((s) => s.maxPastMessages)
@@ -88,6 +89,7 @@ export const useModelProviderState = () => {
     difyKey,
     useSearchGrounding,
     dynamicRetrievalThreshold,
+    geminiThinkingLevel,
     deepseekKey,
     openrouterKey,
     maxPastMessages,
