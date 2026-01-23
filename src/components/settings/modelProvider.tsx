@@ -62,6 +62,7 @@ const ModelProvider = () => {
             enableMultiModal={state.enableMultiModal}
             useSearchGrounding={state.useSearchGrounding}
             dynamicRetrievalThreshold={state.dynamicRetrievalThreshold}
+            geminiThinkingLevel={state.geminiThinkingLevel}
             updateMultiModalModeForModel={updateMultiModalModeForModel}
           />
         )

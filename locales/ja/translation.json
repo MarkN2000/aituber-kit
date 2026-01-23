@@ -264,6 +264,8 @@
   "DynamicRetrieval": "動的検索",
   "DynamicRetrievalDescription": "モデルが検索を実行するタイミングしきい値を設定します。0の場合は常に検索を実行し、1の場合は検索を実行しません。",
   "DynamicRetrievalThreshold": "動的しきい値",
+  "GeminiThinkingLevel": "Gemini 思考レベル",
+  "GeminiThinkingLevelDescription": "Gemini 3シリーズの思考の深さを制御します。高いほど複雑なタスクに適しますが、レスポンス時間が長くなります。",
   "UpdateRealtimeAPISettings": "リアルタイムAPI設定を更新",
   "UpdateRealtimeAPISettingsInfo": "APIキー、Azure Endpoint、ボイスタイプ、モデル、システムプロンプトを更新した際は更新ボタンを押して、新しいWebSocketセッションを開始してください。",
   "AzureEndpoint": "Azure Endpoint",

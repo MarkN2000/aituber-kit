@@ -197,6 +197,7 @@ interface General {
   clientId: string
   useSearchGrounding: boolean
   dynamicRetrievalThreshold: number
+  geminiThinkingLevel: 'minimal' | 'low' | 'medium' | 'high'
   maxPastMessages: number
   useVideoAsBackground: boolean
   temperature: number
@@ -454,6 +455,11 @@ const getInitialValuesFromEnv = (): SettingsState => ({
   dynamicRetrievalThreshold:
     parseFloat(process.env.NEXT_PUBLIC_DYNAMIC_RETRIEVAL_THRESHOLD || '0.3') ||
     0.3,
+  geminiThinkingLevel: (process.env.NEXT_PUBLIC_GEMINI_THINKING_LEVEL as
+    | 'minimal'
+    | 'low'
+    | 'medium'
+    | 'high') || 'low',
   maxPastMessages:
     parseInt(process.env.NEXT_PUBLIC_MAX_PAST_MESSAGES || '10') || 10,
   useVideoAsBackground:
@@ -667,6 +673,7 @@ const settingsStore = create<SettingsState>()(
       messageReceiverEnabled: state.messageReceiverEnabled,
       clientId: state.clientId,
       useSearchGrounding: state.useSearchGrounding,
+      geminiThinkingLevel: state.geminiThinkingLevel,
       openaiTTSVoice: state.openaiTTSVoice,
       openaiTTSModel: state.openaiTTSModel,
       openaiTTSSpeed: state.openaiTTSSpeed,
