@@ -1,8 +1,6 @@
-### これは<a href="https://github.com/tegnike/aituber-kit" target="_blank" rel="noopener noreferrer">本家AITuberKit</a>をMarkNがフォークしたものです
+### このプロジェクトはアップデートされていません。<a href="https://github.com/tegnike/aituber-kit" target="_blank" rel="noopener noreferrer">本家AITuberKit</a>をお使いください。
 
-Node.jsは最新だとエラーになるのでv20.18.3とかをインストールしてから使ってね<br>
-プルリクエストやフォーク大歓迎<br>
-機能ごとにブランチを分けてあるよ（mainブランチは全部入り）（useとdevelopは無視して）
+このプロジェクトで追加していた機能のほとんどは本家に実装されました。
 
 - <a href="https://markn2000.com/" target="_blank" rel="noopener noreferrer">MarkNのホームページ</a>
 
