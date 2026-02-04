@@ -50,7 +50,7 @@ const modelDefinitions: Record<AIService, ModelInfo[]> = {
   ],
   google: [
     { name: 'gemini-3-pro-preview', multiModal: true },
-    { name: 'gemini-3-flash-preview', multiModal: true, isDefault: true },
+    { name: 'gemini-3-flash-preview', multiModal: true, isDefault: true  },
     { name: 'gemini-2.5-pro', multiModal: true },
     { name: 'gemini-2.5-flash', multiModal: true},
     { name: 'gemini-2.5-flash-lite', multiModal: true },

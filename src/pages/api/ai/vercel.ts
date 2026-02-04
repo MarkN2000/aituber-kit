@@ -41,7 +41,6 @@ export default async function handler(req: NextRequest) {
     stream,
     useSearchGrounding,
     dynamicRetrievalThreshold,
-    geminiThinkingLevel = 'low',
     temperature = 1.0,
     maxTokens = 4096,
   } = await req.json()
@@ -146,16 +145,11 @@ export default async function handler(req: NextRequest) {
       useSearchGrounding &&
       modifiedMessages.every((msg) => typeof msg.content === 'string')
 
-    // Gemini 3シリーズの判定
-    const isGemini3Model =
-      aiService === 'google' && modifiedModel?.startsWith('gemini-3-')
-
     let options = {}
-    if (isUseSearchGrounding || isGemini3Model) {
+    if (isUseSearchGrounding) {
       options = {
-        ...(isUseSearchGrounding && { useSearchGrounding: true }),
-        ...(isUseSearchGrounding &&
-          dynamicRetrievalThreshold !== undefined &&
+        useSearchGrounding: true,
+        ...(dynamicRetrievalThreshold !== undefined &&
           modifiedModel &&
           googleSearchGroundingModels.includes(
             modifiedModel as (typeof googleSearchGroundingModels)[number]
@@ -164,11 +158,6 @@ export default async function handler(req: NextRequest) {
               dynamicThreshold: dynamicRetrievalThreshold,
             },
           }),
-        ...(isGemini3Model && {
-          thinkingConfig: {
-            thinkingLevel: geminiThinkingLevel,
-          },
-        }),
       }
     }
 
@@ -183,7 +172,6 @@ export default async function handler(req: NextRequest) {
         temperature,
         maxTokens,
         options,
-        aiService,
       })
     } else {
       return await generateAiText({

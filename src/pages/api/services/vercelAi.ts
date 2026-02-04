@@ -60,7 +60,6 @@ export async function streamAiText({
   temperature,
   maxTokens,
   options = {},
-  aiService = '',
 }: {
   model: string
   modelInstance: any
@@ -68,21 +67,13 @@ export async function streamAiText({
   temperature: number
   maxTokens: number
   options?: any
-  aiService?: string
 }) {
   try {
-    // providerOptionsを構築（Google固有のオプションはgoogleキー配下に）
-    const providerOptions =
-      aiService === 'google' && Object.keys(options).length > 0
-        ? { google: options }
-        : undefined
-
     const result = await streamText({
-      model: modelInstance(model),
+      model: modelInstance(model, options),
       messages: messages as CoreMessage[],
       temperature,
       maxTokens,
-      ...(providerOptions && { providerOptions }),
     })
 
     return result.toDataStreamResponse()

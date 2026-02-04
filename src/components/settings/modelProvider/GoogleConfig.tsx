@@ -16,7 +16,6 @@ interface GoogleConfigProps {
   enableMultiModal: boolean
   useSearchGrounding: boolean
   dynamicRetrievalThreshold: number
-  geminiThinkingLevel: 'minimal' | 'low' | 'medium' | 'high'
   updateMultiModalModeForModel: (service: AIService, model: string) => void
 }
 
@@ -27,7 +26,6 @@ export const GoogleConfig = ({
   enableMultiModal,
   useSearchGrounding,
   dynamicRetrievalThreshold,
-  geminiThinkingLevel,
   updateMultiModalModeForModel,
 }: GoogleConfigProps) => {
   const { t } = useTranslation()
@@ -138,33 +136,6 @@ export const GoogleConfig = ({
             <div className="my-2 text-sm">
               {t('EnableMultiModalDescription')}
             </div>
-          </div>
-        )}
-
-        {selectAIModel.startsWith('gemini-3-') && (
-          <div className="my-6">
-            <div className="my-4 text-xl font-bold">
-              {t('GeminiThinkingLevel')}
-            </div>
-            <div className="my-4">{t('GeminiThinkingLevelDescription')}</div>
-            <select
-              className="px-4 py-2 w-col-span-2 bg-white hover:bg-white-hover rounded-lg"
-              value={geminiThinkingLevel}
-              onChange={(e) =>
-                settingsStore.setState({
-                  geminiThinkingLevel: e.target.value as
-                    | 'minimal'
-                    | 'low'
-                    | 'medium'
-                    | 'high',
-                })
-              }
-            >
-              <option value="minimal">Minimal</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
           </div>
         )}
       </div>
